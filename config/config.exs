@@ -25,6 +25,23 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Configures Guardian
+config :friction_server, FrictionServer.Authentication.Guardian,
+       issuer: "amiko_server",
+       ttl: { 30, :days },
+       allowed_drift: 2000,
+       secret_key: "OTb8bHSfHVhnMEw/kajXPFMnXRlU2/QZX0q8KEs5Onuye+xn7wBjZNjuR4B7H6d1"
+
+# Configure AWS S3
+config :ex_aws,
+       access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
+       secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
+       s3: [
+         scheme: "https://",
+         host: "s3-elixir.s3.amazonaws.com",
+         region: System.get_env("AWS_REGION")
+       ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
