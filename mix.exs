@@ -53,6 +53,7 @@ defmodule AmikoServer.MixProject do
       {:ex_aws_s3, "~> 2.0"},
       {:hackney, "~> 1.9"},
       {:sweet_xml, "~> 0.6"},
+      {:geocalc, "~> 0.5"},
       {:uuid, "~> 1.1.8"}
     ]
   end
