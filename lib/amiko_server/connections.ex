@@ -37,6 +37,8 @@ defmodule AmikoServer.Connections do
   """
   def get_history!(id), do: Repo.get!(History, id)
 
+  def get_history(id), do: Repo.get(History, id)
+
   @doc """
   Creates a history.
 

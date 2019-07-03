@@ -26,7 +26,7 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 # Configures Guardian
-config :friction_server, FrictionServer.Authentication.Guardian,
+config :amiko_server, AmikoServer.Authentication.Guardian,
        issuer: "amiko_server",
        ttl: { 30, :days },
        allowed_drift: 2000,
