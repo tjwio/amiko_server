@@ -11,9 +11,10 @@ defmodule AmikoServer.Application do
       # Start the Ecto repository
       AmikoServer.Repo,
       # Start the endpoint when the application starts
-      AmikoServerWeb.Endpoint
+      AmikoServerWeb.Endpoint,
       # Starts a worker by calling: AmikoServer.Worker.start_link(arg)
       # {AmikoServer.Worker, arg},
+      AmikoServer.Bump.Handler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

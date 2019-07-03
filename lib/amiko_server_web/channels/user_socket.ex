@@ -2,7 +2,8 @@ defmodule AmikoServerWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", AmikoServerWeb.RoomChannel
+  channel "bump:lobby", AmikoServerWeb.BumpChannel
+  channel "private_room:*", AmikoServerWeb.PrivateRoomChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
@@ -15,8 +16,15 @@ defmodule AmikoServerWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket, _connect_info) do
-    {:ok, socket}
+  def connect(%{"token" => token}, socket, _connect_info) do
+    case Guardian.Phoenix.Socket.authenticate(socket, AmikoServer.Authentication.Guardian, token) do
+      {:ok, authed_socket} -> {:ok, authed_socket}
+      {:error, _} -> :error
+    end
+  end
+
+  def connect(_params, _socket, _connect_info) do
+    :error
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
