@@ -17,12 +17,6 @@ defmodule AmikoServerWeb.Router do
     plug AmikoServerWeb.Pipelines.Auth
   end
 
-  scope "/", AmikoServerWeb do
-    pipe_through :browser
-
-    get "/", PageController, :index
-  end
-
   scope "/api/v1", AmikoServerWeb do
     pipe_through :api # Use the default browser stack
 
