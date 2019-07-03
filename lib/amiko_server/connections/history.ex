@@ -5,6 +5,7 @@ defmodule AmikoServer.Connections.History do
   @derive {Poison.Encoder, except: [:__meta__, :user]}
 
   @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
 
   schema "history" do
     field :latitude, :float

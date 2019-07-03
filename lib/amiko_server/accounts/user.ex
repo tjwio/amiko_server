@@ -23,6 +23,7 @@ defmodule AmikoServer.Accounts.User do
     field :profession, :string
     field :twitter, :string
     field :website, :string
+    has_many :history, AmikoServer.Connections.History, foreign_key: :user_id
 
     timestamps()
   end
