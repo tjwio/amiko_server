@@ -26,8 +26,8 @@ defmodule AmikoServerWeb.Router do
   scope "/api/v1", AmikoServerWeb do
     pipe_through :api # Use the default browser stack
 
-    post "/signup", RegistrationController, :signup
-    post "/login", SessionController, :signin
+    post "/signup", UserController, :signup
+    post "/login", UserController, :login
 
     pipe_through :authenticated
     get "/users/me", UserController, :show

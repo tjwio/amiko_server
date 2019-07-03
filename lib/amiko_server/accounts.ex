@@ -88,6 +88,12 @@ defmodule AmikoServer.Accounts do
     |> Repo.update()
   end
 
+  def update_image_url(%User{} = user, image_url) do
+    user
+    |> User.image_changeset(%{image_url: image_url})
+    |> Repo.update()
+  end
+
   @doc """
   Deletes a User.
 
