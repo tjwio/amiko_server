@@ -63,4 +63,67 @@ defmodule AmikoServer.ConnectionsTest do
       assert %Ecto.Changeset{} = Connections.change_history(history)
     end
   end
+
+  describe "ships" do
+    alias AmikoServer.Connections.Ship
+
+    @valid_attrs %{latitude: 120.5, longitude: 120.5, shared_info: []}
+    @update_attrs %{latitude: 456.7, longitude: 456.7, shared_info: []}
+    @invalid_attrs %{latitude: nil, longitude: nil, shared_info: nil}
+
+    def ship_fixture(attrs \\ %{}) do
+      {:ok, ship} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Connections.create_ship()
+
+      ship
+    end
+
+    test "list_ships/0 returns all ships" do
+      ship = ship_fixture()
+      assert Connections.list_ships() == [ship]
+    end
+
+    test "get_ship!/1 returns the ship with given id" do
+      ship = ship_fixture()
+      assert Connections.get_ship!(ship.id) == ship
+    end
+
+    test "create_ship/1 with valid data creates a ship" do
+      assert {:ok, %Ship{} = ship} = Connections.create_ship(@valid_attrs)
+      assert ship.latitude == 120.5
+      assert ship.longitude == 120.5
+      assert ship.shared_info == []
+    end
+
+    test "create_ship/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Connections.create_ship(@invalid_attrs)
+    end
+
+    test "update_ship/2 with valid data updates the ship" do
+      ship = ship_fixture()
+      assert {:ok, %Ship{} = ship} = Connections.update_ship(ship, @update_attrs)
+      assert ship.latitude == 456.7
+      assert ship.longitude == 456.7
+      assert ship.shared_info == []
+    end
+
+    test "update_ship/2 with invalid data returns error changeset" do
+      ship = ship_fixture()
+      assert {:error, %Ecto.Changeset{}} = Connections.update_ship(ship, @invalid_attrs)
+      assert ship == Connections.get_ship!(ship.id)
+    end
+
+    test "delete_ship/1 deletes the ship" do
+      ship = ship_fixture()
+      assert {:ok, %Ship{}} = Connections.delete_ship(ship)
+      assert_raise Ecto.NoResultsError, fn -> Connections.get_ship!(ship.id) end
+    end
+
+    test "change_ship/1 returns a ship changeset" do
+      ship = ship_fixture()
+      assert %Ecto.Changeset{} = Connections.change_ship(ship)
+    end
+  end
 end
