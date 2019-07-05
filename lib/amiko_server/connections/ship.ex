@@ -21,8 +21,8 @@ defmodule AmikoServer.Connections.Ship do
   @doc false
   def changeset(ship, attrs) do
     ship
-    |> cast(attrs, [:latitude, :longitude, :shared_info, :from_user_id, :to_user_id])
-    |> validate_required([:latitude, :longitude, :shared_info, :from_user_id, :to_user_id])
+    |> cast(attrs, [:latitude, :longitude, :pending, :shared_info, :from_user_id, :to_user_id])
+    |> validate_required([:latitude, :longitude, :pending, :shared_info, :from_user_id, :to_user_id])
     |> assoc_constraint(:to_user)
     |> assoc_constraint(:from_user)
     |> unique_constraint(:to_user, name: :user_ship_index)
@@ -31,6 +31,7 @@ defmodule AmikoServer.Connections.Ship do
   defimpl Poison.Encoder, for: AmikoServer.Connections.Ship do
     def encode(ship, options) do
       user_map = %{
+        id: ship.from_user.id,
         first_name: ship.from_user.first_name,
         last_name: ship.from_user.last_name,
         company: ship.from_user.company,
@@ -39,7 +40,7 @@ defmodule AmikoServer.Connections.Ship do
 
       user_map = Map.merge(user_map, parse_shared_info(ship.from_user, ship.shared_info, %{}))
 
-      Poison.Encoder.Map.encode(%{latitude: ship.latitude, longitude: ship.longitude, inserted_at: ship.inserted_at, user: user_map}, options)
+      Poison.Encoder.Map.encode(%{latitude: ship.latitude, longitude: ship.longitude, pending: ship.pending, inserted_at: ship.inserted_at, user: user_map}, options)
     end
 
     defp parse_shared_info(user, [head | tail], info_map) do
