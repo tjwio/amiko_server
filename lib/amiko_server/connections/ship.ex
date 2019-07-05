@@ -10,6 +10,7 @@ defmodule AmikoServer.Connections.Ship do
   schema "ships" do
     field :latitude, :float
     field :longitude, :float
+    field :pending, :boolean, default: true
     field :shared_info, {:array, :string}, default: []
     belongs_to :from_user, AmikoServer.Accounts.User, foreign_key: :from_user_id
     belongs_to :to_user, AmikoServer.Accounts.User, foreign_key: :to_user_id
