@@ -135,6 +135,11 @@ defmodule AmikoServer.Connections do
   """
   def get_ship!(id), do: Repo.get!(Ship, id)
 
+  def get_ship(from_user_id, to_user_id) do
+    Ship
+    |> Repo.get_by([from_user_id: from_user_id, to_user_id: to_user_id])
+  end
+
   @doc """
   Creates a ship.
 
