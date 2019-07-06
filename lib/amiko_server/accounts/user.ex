@@ -4,7 +4,7 @@ defmodule AmikoServer.Accounts.User do
 
   alias AmikoServer.Repo
 
-  @derive {Poison.Encoder, except: [:__meta__, :password, :password_hash, :history, :ships]}
+  @derive {Poison.Encoder, except: [:__meta__, :password, :password_hash, :cards, :history, :ships]}
 
   @primary_key {:id, :binary_id, autogenerate: true}
 
@@ -23,6 +23,8 @@ defmodule AmikoServer.Accounts.User do
     field :profession, :string
     field :twitter, :string
     field :website, :string
+
+    has_many :cards, AmikoServer.Accounts.Card, foreign_key: :user_id
     has_many :history, AmikoServer.Connections.History, foreign_key: :user_id
     has_many :ships, AmikoServer.Connections.Ship, foreign_key: :to_user_id
 

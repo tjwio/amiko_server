@@ -36,6 +36,7 @@ defmodule AmikoServer.Connections.Ship do
         last_name: ship.from_user.last_name,
         company: ship.from_user.company,
         profession: ship.from_user.profession,
+        image_url: ship.from_user.image_url
       }
 
       user_map = Map.merge(user_map, parse_shared_info(ship.from_user, ship.shared_info, %{}))
