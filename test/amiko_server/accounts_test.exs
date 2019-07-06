@@ -85,4 +85,61 @@ defmodule AmikoServer.AccountsTest do
       assert %Ecto.Changeset{} = Accounts.change_user(user)
     end
   end
+
+  describe "cards" do
+    alias AmikoServer.Accounts.Card
+
+    @valid_attrs %{}
+    @update_attrs %{}
+    @invalid_attrs %{}
+
+    def card_fixture(attrs \\ %{}) do
+      {:ok, card} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Accounts.create_card()
+
+      card
+    end
+
+    test "list_cards/0 returns all cards" do
+      card = card_fixture()
+      assert Accounts.list_cards() == [card]
+    end
+
+    test "get_card!/1 returns the card with given id" do
+      card = card_fixture()
+      assert Accounts.get_card!(card.id) == card
+    end
+
+    test "create_card/1 with valid data creates a card" do
+      assert {:ok, %Card{} = card} = Accounts.create_card(@valid_attrs)
+    end
+
+    test "create_card/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_card(@invalid_attrs)
+    end
+
+    test "update_card/2 with valid data updates the card" do
+      card = card_fixture()
+      assert {:ok, %Card{} = card} = Accounts.update_card(card, @update_attrs)
+    end
+
+    test "update_card/2 with invalid data returns error changeset" do
+      card = card_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_card(card, @invalid_attrs)
+      assert card == Accounts.get_card!(card.id)
+    end
+
+    test "delete_card/1 deletes the card" do
+      card = card_fixture()
+      assert {:ok, %Card{}} = Accounts.delete_card(card)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_card!(card.id) end
+    end
+
+    test "change_card/1 returns a card changeset" do
+      card = card_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_card(card)
+    end
+  end
 end

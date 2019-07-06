@@ -35,6 +35,9 @@ defmodule AmikoServerWeb.Router do
     get "/ships", ShipController, :get_ships
     post "/ships", ShipController, :add_ship
 
+    get "/cards", CardController, :get_cards
+    get "/cards/public/:id", CardController, :get_public_card
+
     post "/upload/image", UploadController, :upload
   end
 end
