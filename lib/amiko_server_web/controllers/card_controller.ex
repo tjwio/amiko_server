@@ -1,7 +1,7 @@
 defmodule AmikoServerWeb.CardController do
   use AmikoServerWeb, :controller
 
-  alias AmikoServer.{Accounts, Authentication.Guardian, Repo}
+  alias AmikoServer.{Accounts, Accounts.User, Authentication.Guardian, Connections, Repo}
 
   action_fallback AmikoServerWeb.FallbackController
 
@@ -14,17 +14,16 @@ defmodule AmikoServerWeb.CardController do
   end
 
   def get_public_card(conn, %{"id" => id}) do
+    user = Guardian.Plug.current_resource(conn)
     card = Accounts.get_card!(id)
     card = Repo.preload(card, :user)
 
+    user_map = User.default_public_map(card.user)
+
+    user_map = Map.put(user_map, :mutual_friends, Connections.get_mutual_friends(user.id, card.user.id))
+
     conn
-    |> send_resp(200, Poison.encode!(%{
-      id: card.user.id,
-      first_name: card.user.first_name,
-      last_name: card.user.last_name,
-      profession: card.user.profession,
-      company: card.user.company,
-      image_url: card.user.image_url }))
+    |> send_resp(200, Poison.encode!(user_map))
   end
 
   def add_card(conn, params) do

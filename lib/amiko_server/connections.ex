@@ -149,8 +149,7 @@ defmodule AmikoServer.Connections do
 
     query = from s in Ship,
             where: s.to_user_id == ^curr_id and not s.pending,
-            preload: [from_user: ^from_user_query],
-            select: s.fro
+            preload: [from_user: ^from_user_query]
 
     ships = Repo.all(query)
 
