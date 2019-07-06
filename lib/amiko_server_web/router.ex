@@ -32,6 +32,9 @@ defmodule AmikoServerWeb.Router do
     post "/users/connections", UserController, :add_connection
     delete "/users/connections/:id", UserController, :delete_connection
 
+    get "/ships", ShipController, :get_ships
+    post "/ships", ShipController, :add_ship
+
     post "/upload/image", UploadController, :upload
   end
 end
