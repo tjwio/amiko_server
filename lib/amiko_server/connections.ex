@@ -4,9 +4,7 @@ defmodule AmikoServer.Connections do
   """
 
   import Ecto.Query, warn: false
-  alias AmikoServer.Repo
-
-  alias AmikoServer.Connections.History
+  alias AmikoServer.{Connections.History, Repo, Accounts.User}
 
   @doc """
   Returns the list of history.
@@ -138,6 +136,27 @@ defmodule AmikoServer.Connections do
   def get_ship(from_user_id, to_user_id) do
     Ship
     |> Repo.get_by([from_user_id: from_user_id, to_user_id: to_user_id])
+  end
+
+  def get_mutual_friends(curr_id, match_id) do
+    ship_query =
+      from s in Ship,
+      where: s.from_user_id == ^match_id
+
+    from_user_query =
+      from u in User,
+      preload: [ships: ^ship_query]
+
+    query = from s in Ship,
+            where: s.to_user_id == ^curr_id and not s.pending,
+            preload: [from_user: ^from_user_query],
+            select: s.fro
+
+    ships = Repo.all(query)
+
+    ships
+    |> Enum.filter(fn ship -> not Enum.empty?(ship.from_user.ships) end)
+    |> Enum.map(fn ship -> User.default_public_map(ship.from_user) end)
   end
 
   @doc """

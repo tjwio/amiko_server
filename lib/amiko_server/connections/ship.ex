@@ -2,6 +2,8 @@ defmodule AmikoServer.Connections.Ship do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias AmikoServer.Accounts.User
+
   @derive {Poison.Encoder, except: [:__meta__, :from_user, :to_user]}
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -30,14 +32,7 @@ defmodule AmikoServer.Connections.Ship do
 
   defimpl Poison.Encoder, for: AmikoServer.Connections.Ship do
     def encode(ship, options) do
-      user_map = %{
-        id: ship.from_user.id,
-        first_name: ship.from_user.first_name,
-        last_name: ship.from_user.last_name,
-        company: ship.from_user.company,
-        profession: ship.from_user.profession,
-        image_url: ship.from_user.image_url
-      }
+      user_map = User.default_public_map(ship.from_user)
 
       user_map = Map.merge(user_map, parse_shared_info(ship.from_user, ship.shared_info, %{}))
 

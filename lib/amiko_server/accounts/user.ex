@@ -44,6 +44,17 @@ defmodule AmikoServer.Accounts.User do
     end
   end
 
+  def default_public_map(user) do
+    %{
+      id: user.id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      company: user.company,
+      profession: user.profession,
+      image_url: user.image_url
+    }
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
