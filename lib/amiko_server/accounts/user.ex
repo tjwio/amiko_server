@@ -9,6 +9,7 @@ defmodule AmikoServer.Accounts.User do
   @primary_key {:id, :binary_id, autogenerate: true}
 
   schema "users" do
+    field :bio, :string
     field :company, :string
     field :email, :string
     field :facebook, :string
@@ -60,14 +61,14 @@ defmodule AmikoServer.Accounts.User do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:first_name, :last_name, :email, :phone, :image_url, :profession, :company, :website, :facebook, :instagram, :linkedin, :twitter])
+    |> cast(params, [:first_name, :last_name, :email, :phone, :image_url, :bio, :profession, :company, :website, :facebook, :instagram, :linkedin, :twitter])
     |> validate_required([:first_name, :last_name, :email, :phone])
     |> validate_email
   end
 
   def registration_changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:first_name, :last_name, :email, :phone, :image_url, :profession, :company, :website, :facebook, :instagram, :linkedin, :twitter, :password])
+    |> cast(params, [:first_name, :last_name, :email, :phone, :image_url, :bio, :profession, :company, :website, :facebook, :instagram, :linkedin, :twitter, :password])
     |> validate_required([:first_name, :last_name, :email, :phone, :password])
     |> validate_changeset
   end
