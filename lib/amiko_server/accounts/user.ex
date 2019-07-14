@@ -8,6 +8,8 @@ defmodule AmikoServer.Accounts.User do
 
   @primary_key {:id, :binary_id, autogenerate: true}
 
+  @timestamps_opts [type: :utc_datetime]
+
   schema "users" do
     field :bio, :string
     field :company, :string

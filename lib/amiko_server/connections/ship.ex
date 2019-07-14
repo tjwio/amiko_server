@@ -9,6 +9,8 @@ defmodule AmikoServer.Connections.Ship do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
 
+  @timestamps_opts [type: :utc_datetime]
+
   schema "ships" do
     field :latitude, :float
     field :longitude, :float
@@ -36,7 +38,7 @@ defmodule AmikoServer.Connections.Ship do
 
       user_map = Map.merge(user_map, parse_shared_info(ship.from_user, ship.shared_info, %{}))
 
-      Poison.Encoder.Map.encode(%{latitude: ship.latitude, longitude: ship.longitude, pending: ship.pending, inserted_at: ship.inserted_at, user: user_map}, options)
+      Poison.Encoder.Map.encode(%{id: ship.id, latitude: ship.latitude, longitude: ship.longitude, pending: ship.pending, inserted_at: ship.inserted_at, user: user_map}, options)
     end
 
     defp parse_shared_info(user, [head | tail], info_map) do

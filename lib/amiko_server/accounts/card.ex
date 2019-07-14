@@ -7,6 +7,8 @@ defmodule AmikoServer.Accounts.Card do
   @primary_key {:id, :binary_id, autogenerate: false}
   @foreign_key_type :binary_id
 
+  @timestamps_opts [type: :utc_datetime]
+
   schema "cards" do
     belongs_to :user, AmikoServer.Accounts.User, foreign_key: :user_id
     timestamps()
