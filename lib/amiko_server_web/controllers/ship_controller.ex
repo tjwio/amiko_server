@@ -14,6 +14,16 @@ defmodule AmikoServerWeb.ShipController do
     |> send_resp(200, Poison.encode!(user.ships))
   end
 
+  def get_specific_user_ship(conn, %{"user_id" => user_id}) do
+    user = Guardian.Plug.current_resource(conn)
+    ship = Connections.get_ship!(user.id, user_id)
+
+    ship = Repo.preload(ship, :from_user)
+
+    conn
+    |> send_resp(200, Poison.encode!(ship))
+  end
+
   def add_ship(conn, %{"to_user_id" => to_user_id} = params) do
     user = Guardian.Plug.current_resource(conn)
     from_user_id = user.id

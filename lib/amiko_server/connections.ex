@@ -138,6 +138,11 @@ defmodule AmikoServer.Connections do
     |> Repo.get_by([from_user_id: from_user_id, to_user_id: to_user_id])
   end
 
+  def get_ship!(from_user_id, to_user_id) do
+    Ship
+    |> Repo.get_by!([from_user_id: from_user_id, to_user_id: to_user_id])
+  end
+
   def get_mutual_friends(curr_id, match_id) do
     ship_query =
       from s in Ship,

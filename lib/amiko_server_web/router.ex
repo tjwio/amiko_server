@@ -33,6 +33,7 @@ defmodule AmikoServerWeb.Router do
     delete "/users/connections/:id", UserController, :delete_connection
 
     get "/ships", ShipController, :get_ships
+    get "/ships/users/:user_id", ShipController, :get_specific_user_ship
     post "/ships", ShipController, :add_ship
 
     get "/cards", CardController, :get_cards

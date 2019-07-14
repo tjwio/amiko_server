@@ -2,7 +2,7 @@ defmodule AmikoServer.Connections.Ship do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias AmikoServer.Accounts.User
+  alias AmikoServer.{Accounts.User, Connections}
 
   @derive {Poison.Encoder, except: [:__meta__, :from_user, :to_user]}
 
@@ -38,7 +38,9 @@ defmodule AmikoServer.Connections.Ship do
 
       user_map = Map.merge(user_map, parse_shared_info(ship.from_user, ship.shared_info, %{}))
 
-      Poison.Encoder.Map.encode(%{id: ship.id, latitude: ship.latitude, longitude: ship.longitude, pending: ship.pending, inserted_at: ship.inserted_at, user: user_map}, options)
+      user_map = Map.put(user_map, :mutual_friends, Connections.get_mutual_friends(ship.to_user_id, ship.from_user_id))
+
+      Poison.Encoder.Map.encode(%{id: ship.id, latitude: ship.latitude, longitude: ship.longitude, pending: ship.pending, shared_info: ship.shared_info, inserted_at: ship.inserted_at, user: user_map}, options)
     end
 
     defp parse_shared_info(user, [head | tail], info_map) do
