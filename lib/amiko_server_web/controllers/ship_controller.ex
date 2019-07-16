@@ -5,6 +5,8 @@ defmodule AmikoServerWeb.ShipController do
 
   action_fallback AmikoServerWeb.FallbackController
 
+  @ship_added_event "ship_added"
+
   def get_ships(conn, _params) do
     user = Guardian.Plug.current_resource(conn)
 
@@ -43,6 +45,9 @@ defmodule AmikoServerWeb.ShipController do
     case Connections.create_ship(params) do
       {:ok, new_ship} ->
         new_ship = Repo.preload(new_ship, :from_user)
+
+        AmikoServerWeb.Endpoint.broadcast("private_room:" <> new_ship.to_user_id, @ship_added_event, Poison.encode!(new_ship) |> Poison.Parser.parse!)
+
         conn
         |> send_resp(200, Poison.encode!(new_ship))
       {:error, _changeset} ->

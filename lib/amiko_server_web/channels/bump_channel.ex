@@ -1,7 +1,7 @@
 defmodule AmikoServerWeb.BumpChannel do
   use AmikoServerWeb, :channel
 
-  alias AmikoServer.Accounts
+  alias AmikoServer.{Accounts, Accounts.User}
 
   @timestamp_max_diff 50.0 # milliseconds
   @bump_matched_event "bump_matched"
@@ -28,8 +28,8 @@ defmodule AmikoServerWeb.BumpChannel do
       IO.puts "matched " <> user_id <> " with " <> closest_user_id
       matched_user = Accounts.get_user(closest_user_id)
       unless curr_user == nil or matched_user == nil do
-        AmikoServerWeb.Endpoint.broadcast("private_room:" <> user_id, @bump_matched_event, Poison.encode!(matched_user) |> Poison.Parser.parse!)
-        AmikoServerWeb.Endpoint.broadcast("private_room:" <> closest_user_id, @bump_matched_event, Poison.encode!(curr_user) |> Poison.Parser.parse!)
+        AmikoServerWeb.Endpoint.broadcast("private_room:" <> user_id, @bump_matched_event, User.default_public_map(matched_user))
+        AmikoServerWeb.Endpoint.broadcast("private_room:" <> closest_user_id, @bump_matched_event, User.default_public_map(curr_user))
       end
 
       {:noreply, socket}
@@ -38,7 +38,7 @@ defmodule AmikoServerWeb.BumpChannel do
 
   def handle_in("bump_test", %{"timestamp" => _timestamp, "latitude" => _latitude, "longitude" => _longitude}, socket) do
     curr_user = Guardian.Phoenix.Socket.current_resource(socket)
-    AmikoServerWeb.Endpoint.broadcast("private_room:" <> curr_user.id, @bump_matched_event, Poison.encode!(curr_user) |> Poison.Parser.parse!)
+    AmikoServerWeb.Endpoint.broadcast("private_room:" <> curr_user.id, @bump_matched_event, User.default_public_map(curr_user))
 
     {:noreply, socket}
   end
