@@ -53,6 +53,7 @@ defmodule AmikoServer.Accounts.User do
       first_name: user.first_name,
       last_name: user.last_name,
       company: user.company,
+      bio: user.bio,
       profession: user.profession,
       image_url: user.image_url
     }
