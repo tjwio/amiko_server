@@ -41,6 +41,18 @@ defmodule AmikoServerWeb.ShipController do
     end
   end
 
+  def update_ship(conn, %{"id" => ship_id} = params) do
+    ship = Connections.get_ship!(ship_id)
+    case Connections.update_ship(ship, params) do
+      {:ok, struct} ->
+        conn
+        |> send_resp(200, Poison.encode!(struct))
+      {:error, _changeset} ->
+        conn
+        |> send_resp(400, Poison.encode!(%{message: "Failed to update ship"}))
+    end
+  end
+
   defp add_ship_helper(conn, params) do
     case Connections.create_ship(params) do
       {:ok, new_ship} ->
