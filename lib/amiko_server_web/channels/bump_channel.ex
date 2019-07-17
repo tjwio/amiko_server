@@ -28,8 +28,8 @@ defmodule AmikoServerWeb.BumpChannel do
       IO.puts "matched " <> user_id <> " with " <> closest_user_id
       matched_user = Accounts.get_user(closest_user_id)
       unless curr_user == nil or matched_user == nil do
-        AmikoServerWeb.Endpoint.broadcast("private_room:" <> user_id, @bump_matched_event, User.default_public_map(matched_user))
-        AmikoServerWeb.Endpoint.broadcast("private_room:" <> closest_user_id, @bump_matched_event, User.default_public_map(curr_user))
+        AmikoServerWeb.Endpoint.broadcast("private_room:" <> user_id, @bump_matched_event, Map.put(User.default_public_map(matched_user), :mutual_friends, Connections.get_mutual_friends(curr_user.id, matched_user.id)))
+        AmikoServerWeb.Endpoint.broadcast("private_room:" <> closest_user_id, @bump_matched_event, Map.put(User.default_public_map(curr_user), :mutual_friends, Connections.get_mutual_friends(matched_user.id, curr_user.id)))
       end
 
       {:noreply, socket}
