@@ -1,7 +1,7 @@
 defmodule AmikoServerWeb.BumpChannel do
   use AmikoServerWeb, :channel
 
-  alias AmikoServer.{Accounts, Accounts.User}
+  alias AmikoServer.{Accounts, Accounts.User, Connections}
 
   @timestamp_max_diff 50.0 # milliseconds
   @bump_matched_event "bump_matched"
