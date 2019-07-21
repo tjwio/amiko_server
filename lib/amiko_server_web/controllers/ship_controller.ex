@@ -41,6 +41,14 @@ defmodule AmikoServerWeb.ShipController do
     end
   end
 
+  def delete_ship(conn, %{"id" => ship_id}) do
+    ship = Connections.get_ship!(ship_id)
+    case Connections.delete_ship(ship) do
+      {:ok, _} -> send_resp(conn, 200, Poison.encode!%{})
+      {:error, _} -> send_resp(conn, 400, Poison.encode!%{})
+    end
+  end
+
   def update_ship(conn, %{"id" => ship_id} = params) do
     ship = Connections.get_ship!(ship_id)
     case Connections.update_ship(ship, params) do
