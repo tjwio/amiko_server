@@ -16,6 +16,7 @@ defmodule AmikoServer.Connections.Ship do
     field :longitude, :float
     field :pending, :boolean, default: true
     field :shared_info, {:array, :string}, default: []
+    field :notes, :string
     belongs_to :from_user, AmikoServer.Accounts.User, foreign_key: :from_user_id
     belongs_to :to_user, AmikoServer.Accounts.User, foreign_key: :to_user_id
 
@@ -25,7 +26,7 @@ defmodule AmikoServer.Connections.Ship do
   @doc false
   def changeset(ship, attrs) do
     ship
-    |> cast(attrs, [:latitude, :longitude, :pending, :shared_info, :from_user_id, :to_user_id])
+    |> cast(attrs, [:latitude, :longitude, :pending, :shared_info, :from_user_id, :to_user_id, :notes])
     |> validate_required([:latitude, :longitude, :pending, :shared_info, :from_user_id, :to_user_id])
     |> assoc_constraint(:to_user)
     |> assoc_constraint(:from_user)
